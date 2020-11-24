@@ -1,43 +1,43 @@
 const mongoose = require('mongoose');
 
 const CallbackHistorySchema = new mongoose.Schema({
-  menteeId:{
-        type: String,
-        required: true
-    },
-  menteeName:{
-	  type: String,
-       required: true
-  },
-    category:{
-        type: String,
-        required: true
-    },
-    query:{
-        type: String,
-        required: true
-    },
+	menteeId: {
+		type: String,
+		required: true
+	},
+	menteeName: {
+		type: String,
+		required: true
+	},
+	category: {
+		type: String,
+		required: true
+	},
+	query: {
+		type: String,
+		required: true
+	},
 	applicationDate: {
 		type: Date,
 		default: Date.now
 	},
-	status:{
-		type:String,
-		default:'pending'
+	status: {
+		type: String,
+		default: 'pending'
 	},
-	approvedBy:{
-		type:String,
-		default:'none'
+	approvedBy: {
+		type: String,
+		default: 'none'
 	},
-	selectedDate:{
-		type:Date,
-		required:true
+	selectedDate: {
+		type: Date,
+		required: true
 	}
 });
 
-const History = mongoose.model('callback', CallbackHistorySchema);
+const CallBackHistory = mongoose.model('callback', CallbackHistorySchema);
 
-module.exports = History;
+module.exports = CallBackHistory;
 
 /* 
 Eg:-

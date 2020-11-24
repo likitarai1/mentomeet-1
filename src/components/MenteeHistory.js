@@ -1,68 +1,55 @@
-/* 
-You can use this component or create a class based component of Name:- MenteeHistory
-What to do here?
-1)If you are using class based component then make a request using axios in the 
-		componentDidMount and or if using functional component then replace the
-		fetch with axios
-2) Extract mentee id from local storage using
-		let menteeID = JSON.parse(localStorage.getItem('user')).id
-3)After making query to '/mentee/history/menteeID' you will get an 'info' object
-		which will be like:
-		info:{
-			id:1,
-			'category':'JEE',
-			'query':'I have Doubt about JEE ...',
-			date:new Date('11/1/2020'),
-			status:'pending'
-		}
-4)Create a Table component LIKE below:-
-		Category Name     Description     Applied Date    Status 
-		JEE					I have ...		1 Nov 2020		Pending
-		
-					or
-		Display same information using bootstrap cards
-		In the current directory there is a file Card.js use it for help 
-		and create cards to display information
-			---------------------
-				Category Name  
-				Description
-				Applied Date
-				Status
-			---------------------	
-		
-5)Choose and colour and design of your choice
+import React, { Component } from 'react';
+import './../css/MenteeHistory.css';
+import axios from 'axios';
 
-if status is pending use different colour and if status is Approved use
-different colour
-		
- */
+const HistoryData = (props) => (
+    <div className="card">
+        <h5 className="card-header">{props.data.applicationDate.split("T")[0]}<span className="badge badge-warning badgePosition">{props.data.category}</span></h5>
+        <div className="card-body">
+            <h4 className="card-title queryTitle">{props.data.query}</h4>
+            <p className="card-text queryDesp">
+                {(props.data.status === "pending") ? "We will reach out to you soon!" : "Answer"}
+                <br />
+                {(props.data.approvedBy === "none") ? "" : props.data.approvedBy}</p>
+        </div >
+    </div >
+)
 
-import React,{useEffect,useState} from 'react';
+class MenteeHistory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        }
+    }
 
-export default function MenteeHistory({iam}){
-	
-	const [info,SetInfo] = useState('');
-	
-	useEffect(() => {
-		let menteeID = JSON.parse(localStorage.getItem('user')).id
-		fetch(`/mentee/history/${menteeID}`)
-		.then(res => res.json())
-		.then(data => {
-			if(data && data.info) SetInfo(data.info)}
-			)
-		.catch(e => alert(e))
-	},[])
-	
-	let list = info && info.map(el => <li>{el.category}</li>)
-	
-	return (
-	<>
-		<p> History  Mentee</p>
-		<p>Find information in file </p>
-		<p>Below data is coming from backend </p>
-		<ul>
-			{list}
-		</ul>
-	</>
-	)
+    componentDidMount() {
+        let menteeID = JSON.parse(localStorage.getItem('user')).id;
+        console.log("LocalStoRAGE>>>>>", menteeID);
+        axios.get(`/mentee/history/${menteeID}`)
+            .then(response => {
+                this.setState({ data: response.data });
+                console.log("Data Set");
+            })
+            .catch((err) => {
+                console.log('Error :', err);
+            })
+    }
+
+    dataList() {
+        return this.state.data.map((currData, i) => {
+            return <HistoryData data={currData} key={i} />;
+        })
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <h1 className="mainTitle">History</h1>
+                {this.dataList()}
+            </React.Fragment>
+        );
+    }
 }
+
+export default MenteeHistory;
