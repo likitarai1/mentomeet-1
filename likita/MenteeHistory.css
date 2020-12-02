@@ -1,0 +1,13 @@
+.badgePosition{
+    float:right;
+}
+.queryTitle{
+    color: #007bff;
+    /* #007bb5 */
+}
+.queryDesp{
+    font-size: 20px; 
+}
+.mainTitle{
+    text-align: center;
+}
